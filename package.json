@@ -1,16 +1,27 @@
 {
   "name": "jmockver",
-  "version": "0.0.1-beta",
+  "version": "0.0.2-beta",
   "description": "Run a mock server with JSON files, customize the response body and status code, all with JSON",
   "main": "lib/index.js",
   "bin": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dadadev88/jmockver"
+  },
   "scripts": {
     "dev": "nodemon src/server/jmockver.ts",
     "build": "rm -rf lib/ && tsc -p .",
     "pack": "npm run build && npm pack"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "json",
+    "mock",
+    "localhost",
+    "serverlocal",
+    "local",
+    "jsonmock"
+  ],
+  "author": "dadadev88",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
