@@ -1,0 +1,6 @@
+mocks/
+src/
+package/
+*.json
+*.tgz
+.editorconfig
