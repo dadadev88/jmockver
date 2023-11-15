@@ -1,10 +1,11 @@
 import { existsSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
 import CLIargs from 'minimist';
-import express, { type Express, RequestHandler } from 'express';
-import { FileConfig, Method } from './types';
+import express, { type Express, type RequestHandler } from 'express';
+import { type FileConfig, type HttpMethod } from './jmockver.types';
 import { join } from 'node:path';
 
+const APP_NAME: string = 'JMockver';
 const args = CLIargs(process.argv.slice(2));
 const app: Express = express();
 
@@ -17,22 +18,22 @@ async function getJSONFiles(mocksDir: string): Promise<string[]> {
   }, []);
 }
 
-function mapRoutes(routes: string[], fileConfig: FileConfig, routePrefix: string) {
+function mapRoutes(routes: string[], fileConfig: FileConfig, routePrefix: string): void {
   routes.forEach(route => {
     const routeConfig = fileConfig[route];
     const routeFullPath = `/${routePrefix}${route}`;
-    const methodsOnRoute = Object.keys(routeConfig) as Method[];
+    const methodsOnRoute = Object.keys(routeConfig) as HttpMethod[];
 
     methodsOnRoute.forEach(method => {
       if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) return;
 
       const methodConfig = routeConfig[method];
       const responseConfig = methodConfig.responses.find(response => {
-        return response.code === methodConfig.codeToResponse;
+        return response.id === methodConfig.idResponseToReturn;
       });
 
-      if (!responseConfig) {
-        console.log(`[JMockVer] ❌ Response with code ${methodConfig.codeToResponse} not found on ${method} ${routeFullPath}`);
+      if (responseConfig === undefined) {
+        console.log(`[${APP_NAME}] ❌ Response with code ${methodConfig.idResponseToReturn} not found on ${method} ${routeFullPath}`);
         return;
       }
 
@@ -43,8 +44,8 @@ function mapRoutes(routes: string[], fileConfig: FileConfig, routePrefix: string
   });
 }
 
-function createRoute(method: Method, path: string, requestHandler: RequestHandler) {
-  console.log(`[JMockVer] 🚦 Creating route ${method} - ${path}`);
+function createRoute(method: HttpMethod, path: string, requestHandler: RequestHandler): Express {
+  console.log(`[${APP_NAME}] 🚦 Creating route ${method} - ${path}`);
 
   if (method === 'GET')
     return app.get(path, requestHandler);
@@ -61,35 +62,35 @@ function createRoute(method: Method, path: string, requestHandler: RequestHandle
   return app.patch(path, requestHandler);
 }
 
-async function generateRoutesFromJSONFiles(path: string, filenames: string[]) {
+async function generateRoutesFromJSONFiles(path: string, filenames: string[]): Promise<void> {
   for (const filename of filenames) {
     const fileContent = await readFile(join(path, filename), { encoding: 'utf-8' });
     try {
-      console.log(`\n[JMockVer] 🗂️  Routes on file ${filename}`);
       const fileConfig: FileConfig = JSON.parse(fileContent);
       const routes = Object.keys(fileConfig);
       const routePrefix = filename.replace('.json', '');
+      console.log(`\n[${APP_NAME}] 🗂️  Routes on file ${filename} -> /${routePrefix}`);
       mapRoutes(routes, fileConfig, routePrefix);
     } catch (error) {
-      console.log('[JMockVer] ❌ Error parsing file ' + filename);
+      console.log(`[${APP_NAME}] ❌ Error parsing file ${filename}`);
     }
   }
 }
 
-(async () => {
+void (async() => {
   const dirArg = args.dir ?? 'mocks';
-  const mocksDir = join('./', dirArg)
+  const mocksDir = join('./', dirArg);
+
   if (existsSync(mocksDir)) {
-    console.log(`[JMockVer] 👁️  Searching JSON mock files in "${mocksDir}" dir`);
+    console.log(`[${APP_NAME}] 👁️  Searching JSON mock files in "${mocksDir}" dir`);
     const files = await getJSONFiles(mocksDir);
     await generateRoutesFromJSONFiles(mocksDir, files);
 
     const port = args.port ?? 3000;
     app.listen(port, () => {
-      console.log(`\n[JMockVer] ✅ Run on port ${port}`);
+      console.log(`\n[${APP_NAME}] ✅ Run on port ${port}`);
     });
   } else {
-    console.log(`[JMockVer] ❌ Don't exists "${mocksDir}" dir, create it or change --dir argument`);
+    console.log(`[${APP_NAME}] ❌ Don't exists "${mocksDir}" dir, create it or change --dir argument`);
   }
 })();
-

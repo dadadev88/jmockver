@@ -14,26 +14,26 @@ Is a library to create a JSON mock server, only need JSON files
   // URL endpoint to serve
   "/your-path/users": {
     // Method to create on endpoint, can create GET, POST, PUT, PATCH and DELETE
+    // It is not require declare all methods, only those you need
     "GET": {
       // Code to response, this is finded into responses property
-      "codeToResponse": "RESP001",
+      "idResponseToReturn": "RESP001",
       // Array with your multiple response, can create that the ones you need
       "responses": [
         {
-          // Code for match with codeToResponse property
-          "code": "RESP001",
-          // Status code to return on response (200, 201, 400, 401, 500 etc etc)
+          // Response id, for match with idResponseToReturn property
+          "id": "RESP001",
+          // Status code to return on response (200, 201, 400, 401, 500 etc etc). Default 200
           "statusCode": 200,
-          // Body to return on response, can to be anything valid JSON response
+          // Body to return on response, can to be any valid JSON response (object, list, etc etc)
           "body": []
         },
+        // Another response, you can create multiple responses into list (responses property).
+        // It will be return response that made match with idResponseToReturn property
         {
-          // Code for match with codeToResponse property
-          "code": "R002",
-          // Status code to return on response
+          "id": "R002",
           "statusCode": 201,
-          // Body to return on response, can to be anything valid JSON response
-          "body": []
+          "body": {}
         },
       ]
     },
@@ -44,9 +44,7 @@ Is a library to create a JSON mock server, only need JSON files
   }
 }
 ```
-
 * After create JSON files, create a script in your package.json
-
 ```jsonc
 {
   "scripts": {
@@ -55,11 +53,9 @@ Is a library to create a JSON mock server, only need JSON files
   }
 }
 ```
-
 * Run script ```npm run jmockver```, and you can see all readed JSON files with routes detail.
 
 Example:
-
 ```bash
 [JMockVer] ✅  Starting
 [JMockVer] 👁️  Searching JSON mock files in "mocks" dir
@@ -78,14 +74,14 @@ Example:
 [JMockVer] ✅ Run on port 3201
 ```
 
-If you set a **codeToResponse** with a code than not exists on **responses** list, this route will not be serve and you see the following message
+If you set a **idResponseToReturn** with a code than not exists on **responses** list, this route will not be serve and you see the following message
 
 Example:
 ```bash
 [JMockVer] ❌ Response with code RESP001 not found on GET /sales/by-user/1
 ```
 
-You can install globally to use **jmockver** from anywhere path.
+You can install globally to use **jmockver** from anywhere path or project, consider that it always requires finding the mocks folder.
 
 ```bash
 npm install jmockver -g
