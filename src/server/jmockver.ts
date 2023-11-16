@@ -1,7 +1,9 @@
 import { existsSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
-import CLIargs from 'minimist';
 import express, { type Express, type RequestHandler } from 'express';
+import CLIargs from 'minimist';
+import cors from 'cors';
+import morgan from 'morgan';
 import { type FileConfig, type HttpMethod } from './jmockver.types';
 import { join } from 'node:path';
 
@@ -77,14 +79,30 @@ async function generateRoutesFromJSONFiles(path: string, filenames: string[]): P
   }
 }
 
-void (async() => {
+void (async () => {
   const dirArg = args.dir ?? 'mocks';
   const mocksDir = join('./', dirArg);
 
   if (existsSync(mocksDir)) {
-    console.log(`[${APP_NAME}] 👁️  Searching JSON mock files in "${mocksDir}" dir`);
+    console.log(`\n[${APP_NAME}] 🔎 Searching JSON mock files in "${mocksDir}" dir`);
     const files = await getJSONFiles(mocksDir);
     await generateRoutesFromJSONFiles(mocksDir, files);
+
+    app.use(cors());
+
+    const isEnableLogger = Boolean(args.logger);
+    if (isEnableLogger) {
+      const hasLoggerFormat = Boolean(args.loggerFormat);
+
+      const loggerFormat = hasLoggerFormat ? args.loggerFormat : 'tiny';
+      const ALLOWED_LOGGER_FORMATS = ['combined', 'dev', 'short', 'tiny'];
+
+      if (hasLoggerFormat && !ALLOWED_LOGGER_FORMATS.includes(args.loggerFormat))
+        console.log(`[${APP_NAME}] ❌ Logger format invalid, will show default format (tiny)`);
+
+      console.log(`\n[${APP_NAME}] 👁️  Logger enable with format "${loggerFormat}"`);
+      app.use(morgan(loggerFormat));
+    }
 
     const port = args.port ?? 3000;
     app.listen(port, () => {
