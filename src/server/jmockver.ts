@@ -18,8 +18,6 @@ isEnableLogger && enableLogger(args.loggerFormat);
 function enableLogger(format: string): void {
   const hasLoggerFormat = Boolean(format);
   const loggerFormat = hasLoggerFormat ? format : 'tiny';
-
-  console.log(`[${APP_NAME}] 👁️  Logger enable with format "${loggerFormat}"`);
   app.use(morgan(loggerFormat));
 }
 
@@ -102,6 +100,8 @@ void (async function a() {
 
     const port = args.port ?? 3000;
     app.listen(port, () => {
+      if (isEnableLogger)
+        console.log(`[${APP_NAME}] 👁️  Logger enabled`);
       console.log(`[${APP_NAME}] ✅ Run on port ${port}`);
     });
   } else {
