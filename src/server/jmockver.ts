@@ -10,6 +10,18 @@ import { join } from 'node:path';
 const APP_NAME: string = 'JMockver';
 const args = CLIargs(process.argv.slice(2));
 const app: Express = express();
+app.use(cors());
+
+const isEnableLogger = Boolean(args.logger);
+isEnableLogger && enableLogger(args.loggerFormat);
+
+function enableLogger(format: string): void {
+  const hasLoggerFormat = Boolean(format);
+  const loggerFormat = hasLoggerFormat ? format : 'tiny';
+
+  console.log(`[${APP_NAME}] 👁️  Logger enable with format "${loggerFormat}"`);
+  app.use(morgan(loggerFormat));
+}
 
 async function getJSONFiles(mocksDir: string): Promise<string[]> {
   const filesOnMockFolder = await readdir(mocksDir);
@@ -71,7 +83,7 @@ async function generateRoutesFromJSONFiles(path: string, filenames: string[]): P
       const fileConfig: FileConfig = JSON.parse(fileContent);
       const routes = Object.keys(fileConfig);
       const routePrefix = filename.replace('.json', '');
-      console.log(`\n[${APP_NAME}] 🗂️  Routes on file ${filename} -> /${routePrefix}`);
+      console.log(`[${APP_NAME}] 🗂️  Routes on file ${filename} -> /${routePrefix}`);
       mapRoutes(routes, fileConfig, routePrefix);
     } catch (error) {
       console.log(`[${APP_NAME}] ❌ Error parsing file ${filename}`);
@@ -79,7 +91,7 @@ async function generateRoutesFromJSONFiles(path: string, filenames: string[]): P
   }
 }
 
-void (async () => {
+void (async function a() {
   const dirArg = args.dir ?? 'mocks';
   const mocksDir = join('./', dirArg);
 
@@ -88,25 +100,9 @@ void (async () => {
     const files = await getJSONFiles(mocksDir);
     await generateRoutesFromJSONFiles(mocksDir, files);
 
-    app.use(cors());
-
-    const isEnableLogger = Boolean(args.logger);
-    if (isEnableLogger) {
-      const hasLoggerFormat = Boolean(args.loggerFormat);
-
-      const loggerFormat = hasLoggerFormat ? args.loggerFormat : 'tiny';
-      const ALLOWED_LOGGER_FORMATS = ['combined', 'dev', 'short', 'tiny'];
-
-      if (hasLoggerFormat && !ALLOWED_LOGGER_FORMATS.includes(args.loggerFormat))
-        console.log(`[${APP_NAME}] ❌ Logger format invalid, will show default format (tiny)`);
-
-      console.log(`\n[${APP_NAME}] 👁️  Logger enable with format "${loggerFormat}"`);
-      app.use(morgan(loggerFormat));
-    }
-
     const port = args.port ?? 3000;
     app.listen(port, () => {
-      console.log(`\n[${APP_NAME}] ✅ Run on port ${port}`);
+      console.log(`[${APP_NAME}] ✅ Run on port ${port}`);
     });
   } else {
     console.log(`[${APP_NAME}] ❌ Don't exists "${mocksDir}" dir, create it or change --dir argument`);
