@@ -5,7 +5,7 @@ interface ResponseConfig {
 }
 
 export interface MethodConfig {
-  idResponseToReturn: string;
+  responseIdToReturn: string;
   responses: ResponseConfig[];
 }
 

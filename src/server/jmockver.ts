@@ -10,6 +10,7 @@ import { join } from 'node:path';
 const APP_NAME: string = 'JMockver';
 const args = CLIargs(process.argv.slice(2));
 const app: Express = express();
+
 app.use(cors());
 
 const isEnableLogger = Boolean(args.logger);
@@ -30,10 +31,10 @@ async function getJSONFiles(mocksDir: string): Promise<string[]> {
   }, []);
 }
 
-function mapRoutes(routes: string[], fileConfig: FileConfig, routePrefix: string): void {
+function mapRoutes(routes: string[], fileConfig: FileConfig): void {
   routes.forEach(route => {
     const routeConfig = fileConfig[route];
-    const routeFullPath = `/${routePrefix}${route}`;
+    const routeFullPath = `${route.startsWith('/') ? '' : '/'}${route}`;
     const methodsOnRoute = Object.keys(routeConfig) as HttpMethod[];
 
     methodsOnRoute.forEach(method => {
@@ -41,11 +42,11 @@ function mapRoutes(routes: string[], fileConfig: FileConfig, routePrefix: string
 
       const methodConfig = routeConfig[method];
       const responseConfig = methodConfig.responses.find(response => {
-        return response.id === methodConfig.idResponseToReturn;
+        return response.id === methodConfig.responseIdToReturn;
       });
 
       if (responseConfig === undefined) {
-        console.log(`[${APP_NAME}] ❌ Response with code ${methodConfig.idResponseToReturn} not found on ${method} ${routeFullPath}`);
+        console.log(`[${APP_NAME}] ❌ Response with code ${methodConfig.responseIdToReturn} not found on ${method} ${routeFullPath}`);
         return;
       }
 
@@ -80,11 +81,10 @@ async function generateRoutesFromJSONFiles(path: string, filenames: string[]): P
     try {
       const fileConfig: FileConfig = JSON.parse(fileContent);
       const routes = Object.keys(fileConfig);
-      const routePrefix = filename.replace('.json', '');
-      console.log(`[${APP_NAME}] 🗂️  Routes on file ${filename} -> /${routePrefix}`);
-      mapRoutes(routes, fileConfig, routePrefix);
+      console.log(`[${APP_NAME}] 🗂️  Routes in ${filename} file`);
+      mapRoutes(routes, fileConfig);
     } catch (error) {
-      console.log(`[${APP_NAME}] ❌ Error parsing file ${filename}`);
+      console.log(`[${APP_NAME}] ❌ Error parsing ${filename} file`);
     }
   }
 }
@@ -102,7 +102,7 @@ void (async function a() {
     app.listen(port, () => {
       if (isEnableLogger)
         console.log(`[${APP_NAME}] 👁️  Logger enabled`);
-      console.log(`[${APP_NAME}] ✅ Run on port ${port}`);
+      console.log(`\n[${APP_NAME}] ✅ Run on port ${port}`);
     });
   } else {
     console.log(`[${APP_NAME}] ❌ Don't exists "${mocksDir}" dir, create it or change --dir argument`);

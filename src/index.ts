@@ -11,11 +11,11 @@ nodemon({
   args: process.argv.slice(2)
 });
 
-nodemon.on('start', function() {
-  console.log(`\n[JSONMockServer] ✅  Starting on port ${args.port ?? 3000}`);
-}).on('quit', function() {
-  console.log('\n[JSONMockServer] 🛑  Stoped');
+nodemon.on('start', () => {
+  console.log(`\n[JMockver] ✅  Starting on port ${args.port ?? 3000}`);
+}).on('quit', () => {
+  console.log('\n[JMockver] 🛑  Stoped');
   process.exit();
-}).on('restart', function() {
-  console.log('\n[JSONMockServer] 🔄  Restarting');
+}).on('restart', () => {
+  console.log('\n[JMockver] 🔄  Restarting');
 });
