@@ -1,6 +1,6 @@
 {
   "name": "jmockver",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Run a mock server with JSON files, customize the response body and status code, all with JSON",
   "main": "lib/index.js",
   "bin": "lib/index.js",
@@ -9,9 +9,10 @@
     "url": "https://github.com/dadadev88/jmockver"
   },
   "scripts": {
-    "dev": "nodemon src/server/jmockver.ts",
+    "dev": "nodemon lib/index.js",
+    "watch": "tsc --watch -p .",
     "build": "rm -rf lib/ && tsc -p .",
-    "pack": "npm run build && npm pack"
+    "pack": "npm run build && minify-all-js lib && npm pack"
   },
   "keywords": [
     "json",
@@ -43,6 +44,8 @@
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-n": "^16.3.1",
     "eslint-plugin-promise": "^6.1.1",
+    "jmockver": "file:jmockver-0.3.0.tgz",
+    "minify-all-js": "^0.1.9",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   }
