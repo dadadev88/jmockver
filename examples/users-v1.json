@@ -1,0 +1,69 @@
+{
+  "/api/v1/users": {
+    "GET": {
+      "responseIdToReturn": "USR-02",
+      "sleep": 2000,
+      "responses": [
+        {
+          "id": "USR-01",
+          "statusCode": 200,
+          "body": [
+            { "id": "1", "username": "user1", "isActive": true },
+            { "id": "2", "username": "user2", "isActive": true }
+          ]
+        },
+        {
+          "id": "USR-02",
+          "statusCode": 200,
+          "body": [
+            { "id": "1", "username": "user12", "isActive": true },
+            { "id": "2", "username": "user3", "isActive": false },
+            { "id": "2", "username": "user3", "isActive": false }
+          ]
+        }
+      ]
+    }
+  },
+  "/api/v1/users/1": {
+    "PUT": {
+      "responseIdToReturn": "USR100-E",
+      "responses": [
+        {
+          "id": "USR001",
+          "statusCode": 200,
+          "body": { "id": "1", "username": "user1", "isActive": true }
+        },
+        {
+          "id": "USR100-E",
+          "statusCode": 404,
+          "body": { "message": "User not found" }
+        }
+      ]
+    },
+    "POST": {
+      "responseIdToReturn": "USR022",
+      "responses": [
+        {
+          "id": "USR022",
+          "statusCode": 201,
+          "body": { "id": "1", "username": "user1", "isActive": true, "createdAt": "2022-01-01T00:00:00.000Z" }
+        }
+      ]
+    },
+    "DELETE": {
+      "responseIdToReturn": "any-string-code2",
+      "responses": [
+        {
+          "id": "any-string-code1",
+          "statusCode": 200,
+          "body": "OK"
+        },
+        {
+          "id": "any-string-code2",
+          "statusCode": 503,
+          "body": { "code": "USER", "message": "User not found" }
+        }
+      ]
+    }
+  }
+}

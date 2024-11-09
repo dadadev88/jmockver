@@ -1,0 +1,56 @@
+{
+  "/api/v1/products": {
+    "GET": {
+      "responseIdToReturn": "RESP001",
+      "sleep": 1000,
+      "responses": [
+        {
+          "id": "RESP001",
+          "statusCode": 200,
+          "body": [
+            { "id": "prd001", "name": "Computer", "price": 1000 },
+            { "id": "prd002", "name": "Computer", "price": 1000 }
+          ]
+        },
+        {
+          "id": "RESP002",
+          "statusCode": 200,
+          "body": [
+            { "id": "prd001", "name": "Computer", "price": 1000 },
+            { "id": "prd004", "name": "Monitor", "price": 800 },
+            { "id": "prd014", "name": "Keyboard", "price": 140 },
+            { "id": "prd0052", "name": "Cellphone", "price": 580 }
+          ]
+        }
+      ]
+    }
+  },
+  "/api/v1/products/prd001": {
+    "GET": {
+      "responseIdToReturn": "RESP-ERR-01",
+      "responses": [
+        {
+          "id": "RESP001",
+          "statusCode": 200,
+          "body": [
+            { "id": "prd001", "name": "Computer", "price": 1000 }
+          ]
+        },
+        {
+          "id": "RESP-ERR-01",
+          "statusCode": 404,
+          "body": {
+            "message": "Product not found"
+          }
+        }
+      ]
+    },
+    "DELETE": {
+      "responseIdToReturn": "RESP001",
+      "responses": [
+        { "id": "RESP001", "statusCode": 200, "body": "OK" },
+        { "id": "RESP002", "statusCode": 404, "body": { "code": "PRO-ERR-01", "message": "Product not found" } }
+      ]
+    }
+  }
+}
