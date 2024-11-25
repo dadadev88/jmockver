@@ -1,0 +1,39 @@
+{
+  // URL endpoint to serve
+  "/api/v1/jmockver-example": {
+    // Method to create on endpoint, can create GET, POST, PUT, PATCH and DELETE
+    // NOTE: it is not require declare all methods, only those you need
+    "GET": {
+      "responseIdToReturn": "RESP001", // ID to response, this is finded into responses id property
+      "sleep": 1000, // Sleep time, useful to simulate response time
+      // Array with your multiple responses, can create that the ones you need
+      "responses": [
+        {
+          "id": "RESP001", // Response id, for match with responseIdToReturn property
+          "statusCode": 200, // Status code to return on response (200, 201, 400, 401, 500 etc etc). Default 200
+          "body": [] // Body to return on response, can to be any valid JSON response (object, list, etc etc)
+        },
+        // You can create multiple responses into same responses property
+        // Only need to change responseIdToReturn property with response ID that you want return
+        { "id": "RESP002", "statusCode": 201, "body": {} },
+        { "id": "RESP404", "statusCode": 404, "body": "Not found" },
+        { "id": "RESP404", "statusCode": 500, "body": "Server error" }
+      ]
+    }
+  },
+  "POST": {
+    "responseIdToReturn": "",
+    "sleep": 2000,
+    "responses": []
+  },
+  "PUT": {
+    "responseIdToReturn": "",
+    "sleep": 800,
+    "responses": []
+  },
+  "DELETE": {
+    "responseIdToReturn": "",
+    "sleep": 500,
+    "responses": []
+  }
+}

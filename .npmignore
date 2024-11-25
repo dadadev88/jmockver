@@ -1,8 +1,11 @@
 mocks/
 src/
 package/
+dist/
 examples/
 .vscode/
 *.json
+*.sh
 *.tgz
 .editorconfig
+.eslint*
