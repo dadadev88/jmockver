@@ -9,7 +9,7 @@ You can create a mock for multiple urls. See [multiple-mock-urls.json](./multipl
 ### JMockver schema
 You can use the JMockver schema to get autocompletion and type safety. You set the `$schema` property into JSON Mock files with value `https://raw.githubusercontent.com/dadadev88/jmockver/master/jmockver-schema.json` (you can see in example files)
 
-Also, you can download the schema file and import into your editor to get autocompletion and type safety.
+Also, you can download the schema file and import into your editor.
 
 #### VSCode example, add this into main object of your settings.json
 ```jsonc
