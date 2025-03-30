@@ -41,7 +41,7 @@
     "$schema": {
       "type": "string",
       "description": "The schema version",
-      "default": "https://raw.githubusercontent.com/dadadev88/jmockver/master/schema/jmockver-schema.json"
+      "default": "https://raw.githubusercontent.com/dadadev88/jmockver/master/jmockver-schema.json"
     }
   },
   "definitions": {
