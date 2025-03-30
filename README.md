@@ -1,9 +1,9 @@
 # JMockver
-Run a mock server with JSON files, all you need is know work with JSON files.
+Run a mock server with JSON files, create a single JSON file to simulate a server response.
 
 JMockver is a command-line tool that helps developers work independently by simulating server responses. Very useful to start a mock server in some minutes, without need to write any code, only need to know the responses structure and set it in a JSON file.
 
-You have total control to set any response body, sleep time to simulate response time, change response headers and more.
+You have total control to set any response body, sleep time to simulate response time, change response headers, HTTP status code and more.
 
 ## How to use?
 * Run command `npm i jmockver -D` to install as dev dependency

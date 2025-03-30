@@ -52,7 +52,7 @@ jobs:
           STABLE_VERSION=$(echo $CURRENT_VERSION | sed 's/-beta\.[0-9]*$//')
 
           echo "Update package.json with stable version"
-          npm version $STABLE_VERSION
+          npm version $STABLE_VERSION -m "[ci] chore: update version to $STABLE_VERSION"
 
           echo "Packaging stable version $STABLE_VERSION"
           npm run package
