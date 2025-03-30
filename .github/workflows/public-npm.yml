@@ -30,13 +30,12 @@ jobs:
 
       - name: Configure git
         run: |
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "GitHub Actions"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Publish RC version package (develop)
         if: github.event.pull_request.base.ref == 'develop'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           LOG_PREFIX: "[JMockver Action - RC]"
         run: |
@@ -53,7 +52,6 @@ jobs:
       - name: Publish stable version package (master)
         if: github.event.pull_request.base.ref == 'master'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           LOG_PREFIX: "[JMockver Action - Stable]"
         run: |
