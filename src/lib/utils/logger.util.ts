@@ -16,7 +16,7 @@ export class LoggerUtil {
 ++++⚙️ Options:
 
 ++++  --port: Port to run the server on. Default: 3000
-++++  --dir: Directory to search for JSON mock files. Default: ./mocks
+++++  --dir: Directory to search for JSON mock files. Default: ./jmockver
 ++++  --loggerFormat: Logger format. Default: tiny
 ++++  --help: Show this help message
 

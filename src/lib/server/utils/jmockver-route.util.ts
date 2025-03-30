@@ -131,7 +131,7 @@ export class JMockverRoutesUtils {
     }
 
     if (!responseConfig || !responseIdToReturn) {
-      throw new JMockverResponseIdNotMatchedError(`Response with code ${responseIdToReturn} not found on ${method} ${routeFullPath}`);
+      throw new JMockverResponseIdNotMatchedError(`Response with code ${responseIdToReturn} not found on "${routeFullPath} - ${method}" route`);
     }
 
     if (this.mockedRoutes.has(routeKey)) {
@@ -139,7 +139,7 @@ export class JMockverRoutesUtils {
     }
 
     if (responseConfig.statusCode < 200 || responseConfig.statusCode > 599) {
-      throw new JMockverStatusCodeNotValidError(`Status code ${responseConfig.statusCode} is not valid, in ${routeFullPath} - ${method} route`);
+      throw new JMockverStatusCodeNotValidError(`Status code ${responseConfig.statusCode} is not valid, in "${routeFullPath} - ${method}" route`);
     }
   }
 

@@ -28,47 +28,41 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Update beta version
+      - name: Publish RC version package (develop)
         if: github.event.pull_request.base.ref == 'develop'
-        run: |
-          echo "Update beta version"
-          npm version prerelease --preid beta --no-git-tag-version
-
-          echo "Packaging"
-          npm run package
-
-          echo "Publish beta version"
-          npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Remove beta and publish stable version
-        if: github.event.pull_request.base.ref == 'master'
+          LOG_PREFIX: "[JMockver Action - RC]"
         run: |
-          echo "Get current version"
-          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "$LOG_PREFIX Updating to RC version"
+          npm version prerelease --preid rc -m "chore: RC package version updated to %s"
 
-          echo "Remove beta suffix"
-          STABLE_VERSION=$(echo $CURRENT_VERSION | sed 's/-beta\.[0-9]*$//')
-
-          echo "Update package.json with stable version"
-          npm version $STABLE_VERSION -m "[ci] chore: update version to $STABLE_VERSION"
-
-          echo "Packaging stable version $STABLE_VERSION"
+          echo "$LOG_PREFIX Packaging RC version and publish"
           npm run package
+          npm publish --tag rc
 
-          echo "Publish stable version $STABLE_VERSION"
+          echo "$LOG_PREFIX Pushing RC version to develop"
+          git push --follow-tags
+
+      - name: Publish stable version package (master)
+        if: github.event.pull_request.base.ref == 'master'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          LOG_PREFIX: "[JMockver Action - Stable]"
+        run: |
+          echo "$LOG_PREFIX Generating stable version"
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          STABLE_VERSION=$(echo $CURRENT_VERSION | sed 's/-rc.*/-stable/')
+          npm version $STABLE_VERSION -m "chore: STABLE package version updated to %s"
+
+          echo "$LOG_PREFIX Packaging stable version $STABLE_VERSION and publish"
+          npm run package
           npm publish
 
-          echo "Setting git config"
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "GitHub Actions"
+          echo "$LOG_PREFIX Pushing stable version to master"
+          git push --follow-tags
 
-          echo "Sync develop with master"
+          echo "$LOG_PREFIX Syncing stable version to develop"
           git checkout develop
-          git merge master --no-edit
+          git merge master
           git push origin develop
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-

@@ -6,15 +6,18 @@ JMockver is a command-line tool that helps developers work independently by simu
 You have total control to set any response body, sleep time to simulate response time, change response headers, HTTP status code and more.
 
 ## How to use?
-* Run command `npm i jmockver -D` to install as dev dependency
-* Create **mocks/** folder in your project root, can change and set with **--dir** argument.
-* Generate a JMockver file example, run `npx jmockver-gen` (need install jmockver previously).
+1. Install JMockver with
+    > npm i jmockver -D
+2. Generate a JMockver file example (need install jmockver previously).
+    > npx jmockver-gen
+3. Run mock server with
+    > npx jmockver
+
+Edit the generated example file with your routes and responses. When edit the file and save, the changes are automatically reflected in the mock server.
 
 Enter here to see JMockver files examples [https://github.com/dadadev88/jmockver/tree/master/examples](https://github.com/dadadev88/jmockver/tree/master/examples).
 
-The changes in the files are automatically reflected in the mock server, so you can apply any changes in the files and see the changes in the mock server.
-
-After generate JMockver files, you can create a script in your package.json to run mock server and generate files easily.
+You can create scripts in your package.json to run mock server and generate files easily.
 
 ```jsonc
 {
@@ -25,12 +28,10 @@ After generate JMockver files, you can create a script in your package.json to r
 }
 ```
 
-* Run script ```npm run mock``` or if not create a script ```npx jmockver```, and you can see all readed JMockver files with routes detail.
-  Example:
-
+After run JMockver, you can see all readed JMockver files with routes detail.
 ```bash
 [JMockver] 🧰 Running JMockver with default arguments. Run with --help to see all arguments
-[JMockver] 🔎 Searching JSON mock files in "mocks" dir
+[JMockver] 🔎 Searching JSON mock files in "jmockver" dir
 
 [JMockver] 🗂️  Routes in 505213-jmockver-example.json file
 [JMockver]      🚦 Creating mock /api/v1/users - GET
@@ -44,15 +45,19 @@ After generate JMockver files, you can create a script in your package.json to r
 [JMockver]      🚦 Creating mock /api/v1/products/100 - GET
 [JMockver]      🚦 Creating mock /api/v1/products/100 - PUT
 
-[JMockver] ✅ Mock server running on http://localhost:3000 or http://127.0.0.1:3000
+[JMockver] ✅ Mock server running on http://localhost:3000
 [JMockver] 👁️ See all routes in http://localhost:3000/jmockver/routes
 ```
 
-If exists an error to serve a route, you will see a similar message to this:
+Also, you can see all routes into a Web UI in `/jmockver/routes`. This looks like this:
 
-Example:
+![JMockver Routes](https://raw.githubusercontent.com/dadadev88/jmockver/master/docs/jmockver-routes-web-ui.png)
+
+If exists an error to serve a route, you will see a message like this:
 
 ```bash
-[JMockver]      ❌ JMockverResponseIdNotMatchedError: Response with code RESP00 not found on POST /api/v1/products
+[JMockver]      ❌ JMockverResponseIdNotMatchedError: Response with code RESP00 not found on "/api/v1/products - POST" route
+[JMockver]      ❌ JMockverRouteAlreadyExistsError: Route "/api/v1/products - POST" already exists on "505213-jmockver-example.json" file
+[JMockver]      ❌ JMockverStatusCodeNotValidError: Status code 600 is not valid, in "/api/v1/products - POST" route
 ```
 
