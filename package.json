@@ -1,6 +1,6 @@
 {
   "name": "jmockver",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Run a mock server with JSON files, customize the response body and status code, all with JSON",
   "main": "./lib/index.js",
   "bin": {
@@ -13,11 +13,9 @@
   },
   "scripts": {
     "dev": "nodemon dist/server/jmockver.js",
-    "watch": "cp -r src/lib/templates/ dist/templates && tsc --watch -p .",
-    "build": "rm -rf package/ && tsc -p .",
-    "minify": "minify-all-js lib",
-    "pack": "sh pack.sh",
-    "mock": "jmockver"
+    "prewatch": "mkdir -p dist/templates && cp -r src/lib/templates/ dist/templates",
+    "watch": "tsc --watch",
+    "package": "sh pack.sh"
   },
   "keywords": [
     "json",

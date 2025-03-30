@@ -2,7 +2,7 @@ import nodemon from 'nodemon';
 import path from 'node:path';
 import CLIargs from 'minimist';
 import { LoggerUtil } from '../lib/utils/logger.util';
-import { JMockverConstants } from '../lib/server/contants/jmockver.constants';
+import { JMockverConstants } from './server/symbols/jmockver.constants';
 
 const args = CLIargs(process.argv.slice(2));
 

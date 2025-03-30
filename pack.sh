@@ -1,10 +1,13 @@
 !#/bin/bash
 
 echo "[JMockver] Building package..."
-npm run build
+rm -rf dist/ && tsc -p .
+
+echo "[JMockver] Copying template files..."
+mkdir -p dist/templates && cp -r src/lib/templates/* ./dist/templates
 
 echo "[JMockver] Copying package files..."
-mkdir lib && cp -r dist/* ./lib && cp -r src/lib/templates ./lib
+mkdir -p lib && cp -r dist/* ./lib
 
 echo "[JMockver] Minifying package..."
 minify-all-js lib
@@ -16,4 +19,4 @@ echo "[JMockver] Packing package..."
 npm pack
 
 echo "[JMockver] Cleaning up..."
-rm -rf bin/ lib/
+rm -rf lib && rm -rf bin
