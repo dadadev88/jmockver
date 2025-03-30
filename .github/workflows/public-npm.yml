@@ -34,6 +34,10 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           LOG_PREFIX: "[JMockver Action - RC]"
         run: |
+          echo "$LOG_PREFIX Configuring git"
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+
           echo "$LOG_PREFIX Updating to RC version"
           npm version prerelease --preid rc -m "chore: RC package version updated to %s"
 
@@ -50,6 +54,10 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           LOG_PREFIX: "[JMockver Action - Stable]"
         run: |
+          echo "$LOG_PREFIX Configuring git"
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+
           echo "$LOG_PREFIX Generating stable version"
           CURRENT_VERSION=$(node -p "require('./package.json').version")
           STABLE_VERSION=$(echo $CURRENT_VERSION | sed 's/-rc.*/-stable/')
