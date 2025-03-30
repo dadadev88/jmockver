@@ -4,6 +4,7 @@ package/
 dist/
 examples/
 .vscode/
+.github/
 *.json
 *.sh
 *.tgz
