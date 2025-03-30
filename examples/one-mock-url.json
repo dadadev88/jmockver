@@ -1,0 +1,37 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dadadev88/jmockver/master/jmockver-schema.json",
+  "mocks": [
+    {
+      "url": "/api/v1/products",
+      "methods": {
+        "GET": {
+          "responseIdToReturn": "RESP001",
+          "responses": [
+            {
+              "id": "RESP001",
+              "statusCode": 200,
+              "sleep": 200,
+              "headers": {
+                "X-Header-Example": "Example value"
+              },
+              "body": [
+                { "id": 100, "name": "Product 1", "price": 100 },
+                { "id": 300, "name": "Product 3", "price": 300 }
+              ]
+            }
+          ]
+        },
+        "POST": {
+          "responseIdToReturn": "RESP001",
+          "responses": [
+            {
+              "id": "RESP001",
+              "statusCode": 200,
+              "body": { "id": 300, "name": "Product 3", "price": 300 }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

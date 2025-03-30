@@ -1,6 +1,12 @@
 import { RouteConfig } from "./route-config";
 
-export type FileConfig = Record<string, RouteConfig>;
+export type JMockverFile = {
+  $schema: string;
+  mocks: {
+    url: string;
+    methods: RouteConfig;
+  }[];
+};
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 

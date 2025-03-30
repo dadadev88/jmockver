@@ -1,18 +1,21 @@
 {
   "name": "jmockver",
-  "version": "1.0.0",
+  "version": "2.0.3",
   "description": "Run a mock server with JSON files, customize the response body and status code, all with JSON",
-  "main": "lib/index.js",
-  "bin": "lib/index.js",
+  "main": "./lib/index.js",
+  "bin": {
+    "jmockver": "./bin/jmockver",
+    "jmockver-gen": "./bin/jmockverg"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/dadadev88/jmockver"
   },
   "scripts": {
-    "dev": "nodemon lib/index.js",
-    "watch": "tsc --watch -p .",
-    "build": "rm -rf lib/ && tsc -p .",
-    "pack": "npm run build && minify-all-js lib && npm pack"
+    "dev": "nodemon dist/server/jmockver.js",
+    "prewatch": "mkdir -p dist/templates && cp -r src/lib/templates/ dist/templates",
+    "watch": "tsc --watch",
+    "package": "sh pack.sh"
   },
   "keywords": [
     "json",
@@ -20,7 +23,12 @@
     "localhost",
     "serverlocal",
     "local",
-    "jsonmock"
+    "jsonmock",
+    "mock-server",
+    "json-mock-server",
+    "json-mock-server-cli",
+    "json-mock-server-cli-tool",
+    "jmockver"
   ],
   "author": "dadadev88",
   "license": "ISC",
@@ -44,7 +52,6 @@
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-n": "^16.3.1",
     "eslint-plugin-promise": "^6.1.1",
-    "jmockver": "file:jmockver-0.3.0.tgz",
     "minify-all-js": "^0.1.9",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"

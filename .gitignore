@@ -1,4 +1,6 @@
 mocks/
+package/
+dist/
 lib/
 node_modules/
 *.tgz
