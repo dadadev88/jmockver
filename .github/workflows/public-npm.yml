@@ -28,16 +28,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Publish RC version package (develop)
-        if: github.event.pull_request.base.ref == 'develop'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          LOG_PREFIX: "[JMockver Action - RC]"
+      - name: Configure git
         run: |
-          echo "$LOG_PREFIX Configuring git"
           git config --global user.email "github-actions@github.com"
           git config --global user.name "GitHub Actions"
 
+      - name: Publish RC version package (develop)
+        if: github.event.pull_request.base.ref == 'develop'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          LOG_PREFIX: "[JMockver Action - RC]"
+        run: |
           echo "$LOG_PREFIX Updating to RC version"
           npm version prerelease --preid rc -m "chore: RC package version updated to %s"
 
@@ -51,16 +53,14 @@ jobs:
       - name: Publish stable version package (master)
         if: github.event.pull_request.base.ref == 'master'
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           LOG_PREFIX: "[JMockver Action - Stable]"
         run: |
-          echo "$LOG_PREFIX Configuring git"
-          git config --global user.email "github-actions@github.com"
-          git config --global user.name "GitHub Actions"
-
           echo "$LOG_PREFIX Generating stable version"
+
           CURRENT_VERSION=$(node -p "require('./package.json').version")
-          STABLE_VERSION=$(echo $CURRENT_VERSION | sed 's/-rc.*/-stable/')
+          STABLE_VERSION=$(echo $CURRENT_VERSION | sed 's/-rc\.[0-9]*$//')
           npm version $STABLE_VERSION -m "chore: STABLE package version updated to %s"
 
           echo "$LOG_PREFIX Packaging stable version $STABLE_VERSION and publish"
