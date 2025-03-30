@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs';
+import { existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import express, { type Express } from 'express';
 import CLIargs from 'minimist';
@@ -20,37 +20,40 @@ class JMockver {
 
   private loadMiddleware(): void {
     this.app.use(cors());
-    this.app.use(morgan(this.cliArgs.loggerFormat ?? 'tiny'));
+    this.app.use(morgan(this.cliArgs.loggerFormat ?? JMockverConstants.LOGGER_FORMAT_DEFAULT));
   }
 
   async run(): Promise<void> {
-    const dirArg = this.cliArgs.dir ?? 'mocks';
+    const dirArg = this.cliArgs.dir ?? JMockverConstants.MOCKS_DIR_DEFAULT;
     const mocksFolder = join('./', dirArg);
 
-    if (existsSync(mocksFolder)) {
-      LoggerUtil.info(`🔎 Searching JSON mock files in "${mocksFolder}" dir`);
-
-      const fileUtils = new JMockverFileUtils();
-      const files = await fileUtils.getJSONFilenames(mocksFolder);
-
-      if (files.length === 0) {
-        LoggerUtil.info(`❌ No mock files found in "${mocksFolder}" dir. Create one or more mock files.`);
-        LoggerUtil.info(`💡 See examples in https://github.com/dadadev88/jmockver/tree/master/examples`);
-        return;
-      }
-
-      const routesUtils = new JMockverRoutesUtils(this.app);
-      await routesUtils.generateRoutesFromJSONFiles(mocksFolder, files);
-
-      const port = this.cliArgs.port ?? JMockverConstants.APP_PORT_DEFAULT;
-      this.app.listen(port, () => {
-        LoggerUtil.jumpLine();
-        LoggerUtil.info(`✅ Mock server running on http://localhost:${port} or http://127.0.0.1:${port}`);
-        LoggerUtil.info(`👁️ See all routes in http://localhost:${port}/jmockver/routes`);
-      });
-    } else {
-      LoggerUtil.info(`❌ Don't exists "${mocksFolder}" folder, create it or change --dir argument`);
+    if (!existsSync(mocksFolder)) {
+      mkdirSync(mocksFolder, { recursive: true });
+      LoggerUtil.info(`🗂️ Directory "${mocksFolder}" created`);
     }
+
+    LoggerUtil.info(`🔎 Searching JSON mock files in "${mocksFolder}" dir`);
+
+    const fileUtils = new JMockverFileUtils();
+    const files = await fileUtils.getJSONFilenames(mocksFolder);
+
+    if (files.length === 0) {
+      LoggerUtil.jumpLine();
+      LoggerUtil.info(`❌ No mock files found in "${mocksFolder}" dir. If your mock files are in other directory, use --dir argument to change the directory.`);
+      LoggerUtil.info(`💡 Can create an example file with "npx jmockver-gen"`);
+      LoggerUtil.info(`📕 See examples in https://github.com/dadadev88/jmockver/tree/master/examples`);
+      return;
+    }
+
+    const routesUtils = new JMockverRoutesUtils(this.app);
+    await routesUtils.generateRoutesFromJSONFiles(mocksFolder, files);
+
+    const port = this.cliArgs.port ?? JMockverConstants.APP_PORT_DEFAULT;
+    this.app.listen(port, () => {
+      LoggerUtil.jumpLine();
+      LoggerUtil.info(`✅ Mock server running on http://localhost:${port}`);
+      LoggerUtil.info(`👁️ See all routes in http://localhost:${port}/jmockver/routes`);
+    });
   }
 }
 
