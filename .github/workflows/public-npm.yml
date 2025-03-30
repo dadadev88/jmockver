@@ -1,4 +1,5 @@
 name: Public NPM package
+run-name: Publish NPM package from ${{ github.event.pull_request.base.ref }}
 
 on:
   pull_request:
@@ -6,7 +7,8 @@ on:
     branches: [develop, master]
 
 jobs:
-  build:
+  build-publish:
+    name: Build and publish NPM package
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
 
@@ -36,7 +38,7 @@ jobs:
           npm run package
 
           echo "Publish beta version"
-          npm publish
+          npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
