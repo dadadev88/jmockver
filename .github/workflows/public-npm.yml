@@ -42,9 +42,14 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          RC_VERSION=$(node -p "require('./package.json').version")
           echo "[JMockver Action - RC] Packaging RC version and publish"
           npm run package
           npm publish --tag rc
+
+          echo "$LOG_PREFIX Creating tag v$RC_VERSION and push to origin"
+          git tag v$RC_VERSION
+          git push origin v$RC_VERSION
 
       - name: Publish stable version package (master)
         if: github.event.pull_request.base.ref == 'master'
