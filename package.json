@@ -1,6 +1,6 @@
 {
   "name": "jmockver",
-  "version": "2.0.2-rc.1",
+  "version": "2.0.3-rc.0",
   "description": "Run a mock server with JSON files, customize the response body and status code, all with JSON",
   "main": "./lib/index.js",
   "bin": {
