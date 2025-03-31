@@ -11,7 +11,7 @@ class JMockverGenerator {
   }
 
   public async generate(): Promise<void> {
-    const dirArg = this.cliArgs.dir ?? 'mocks';
+    const dirArg = this.cliArgs.dir ?? 'jmockver';
     const mocksDirectory = join('./', dirArg);
     const ramdonNumber = Math.floor(Math.random() * 1000000);
     const filename = 'jmockver-example.template';
