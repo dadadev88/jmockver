@@ -41,26 +41,19 @@ jobs:
         if: github.event.pull_request.base.ref == 'develop'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          LOG_PREFIX: "[JMockver Action - RC]"
         run: |
-          echo "$LOG_PREFIX Updating to RC version"
-          npm version prerelease --preid rc -m "chore: RC package version updated to %s"
-
-          echo "$LOG_PREFIX Packaging RC version and publish"
+          echo "[JMockver Action - RC] Packaging RC version and publish"
           npm run package
           npm publish --tag rc
-
-          echo "$LOG_PREFIX Pushing RC version to develop"
-          git push --follow-tags
 
       - name: Publish stable version package (master)
         if: github.event.pull_request.base.ref == 'master'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          LOG_PREFIX: "[JMockver Action - Stable]"
         run: |
-          echo "$LOG_PREFIX Generating stable version"
+          LOG_PREFIX="[JMockver Action - Stable]"
 
+          echo "$LOG_PREFIX Generating stable version"
           CURRENT_VERSION=$(node -p "require('./package.json').version")
           STABLE_VERSION=$(echo $CURRENT_VERSION | sed 's/-rc\.[0-9]*$//')
           npm version $STABLE_VERSION -m "chore: STABLE package version updated to %s"
@@ -69,10 +62,6 @@ jobs:
           npm run package
           npm publish
 
-          echo "$LOG_PREFIX Pushing stable version to master"
-          git push --follow-tags
-
-          echo "$LOG_PREFIX Syncing stable version to develop"
-          git checkout develop
-          git merge master
-          git push origin develop
+          echo "$LOG_PREFIX Creating tag $STABLE_VERSION and push to origin"
+          git tag $STABLE_VERSION
+          git push origin $STABLE_VERSION
