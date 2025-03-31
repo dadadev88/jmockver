@@ -62,6 +62,6 @@ jobs:
           npm run package
           npm publish
 
-          echo "$LOG_PREFIX Creating tag $STABLE_VERSION and push to origin"
-          git tag $STABLE_VERSION
-          git push origin $STABLE_VERSION
+          echo "$LOG_PREFIX Creating tag v$STABLE_VERSION and push to origin"
+          git tag v$STABLE_VERSION
+          git push origin v$STABLE_VERSION
