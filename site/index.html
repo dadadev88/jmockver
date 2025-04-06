@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./styles.css">
+  <title>JMockver - Mock Server with JSON Files</title>
+</head>
+
+<body>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="sidebar__top--center">
+        <label for="switch-theme" class="switch-theme">
+          <input type="checkbox" name="switch-theme" id="switch-theme">
+          <span class="switch-theme__check"></span>
+        </label>
+      </div>
+      <h3>Getting Started</h3>
+      <ul>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#generate-mock">Generate Mock File</a></li>
+        <li><a href="#run-server">Run Mock Server</a></li>
+      </ul>
+      <h3>Configuration</h3>
+      <ul>
+        <li><a href="#edit-mock">Edit Mock Files</a></li>
+        <li><a href="#scripts">Package Scripts</a></li>
+      </ul>
+      <h3>Features</h3>
+      <ul>
+        <li><a href="#routes">View Routes</a></li>
+        <li><a href="#web-ui">Web UI</a></li>
+        <li><a href="#errors">Error Handling</a></li>
+      </ul>
+    </nav>
+
+
+    <main class="main-content">
+
+      <h1>JMockver</h1>
+      <p>Run a mock server with JSON files, create a single JSON file to simulate a server response.</p>
+
+      <p>JMockver is a command-line tool that helps developers work independently by simulating server responses. Very
+        useful to start a mock server in some minutes, without need to write any code, only need to know the responses
+        structure and set it in a JSON file.</p>
+
+      <p>You have total control to set any response body, sleep time to simulate response time, change response headers,
+        HTTP status code and more.</p>
+
+      <h2 id="installation">How to use?</h2>
+      <ol>
+        <li>Install JMockver with
+          <pre><code>npm i jmockver -D</code></pre>
+        </li>
+        <li>Generate a JMockver file example (need install jmockver previously).
+          <pre><code>npx jmockver-gen</code></pre>
+        </li>
+        <li>Run mock server with
+          <pre><code>npx jmockver</code></pre>
+        </li>
+      </ol>
+
+      <p id="edit-mock">Edit the generated example file with your routes and responses. When edit the file and save, the
+        changes are automatically reflected in the mock server.</p>
+
+      <p>Enter here to see JMockver files examples
+        <a href="https://github.com/dadadev88/jmockver/tree/master/docs/examples"
+          target="_blank" rel="noopener noreferrer"
+        >
+          https://github.com/dadadev88/jmockver/tree/master/docs/examples
+        </a>.
+      </p>
+
+      <p id="scripts">You can create scripts in your package.json to run mock server and generate files easily.</p>
+
+      <pre><code>{
+    "scripts": {
+      "mock": "jmockver", // Run with --help to see all arguments
+      "mock-gen": "jmockver-gen" // Run with --help to see all arguments
+    }
+}</code></pre>
+
+      <p id="routes">After run JMockver, you can see all readed JMockver files with routes detail.</p>
+
+      <pre><code>[JMockver] 🧰 Running JMockver with default arguments. Run with --help to see all arguments
+  [JMockver] 🔎 Searching JSON mock files in "jmockver" dir
+
+  [JMockver] 🗂️  Routes in 505213-jmockver-example.json file
+  [JMockver]      🚦 Creating mock /api/v1/users - GET
+  [JMockver]      🚦 Creating mock /api/v1/users - POST
+  [JMockver]      🚦 Creating mock /api/v1/users/100 - GET
+  [JMockver]      🚦 Creating mock /api/v1/users/100 - PUT
+
+  [JMockver] 🗂️  Routes in 821989-jmockver-example.json file
+  [JMockver]      🚦 Creating mock /api/v1/products - GET
+  [JMockver]      🚦 Creating mock /api/v1/products - POST
+  [JMockver]      🚦 Creating mock /api/v1/products/100 - GET
+  [JMockver]      🚦 Creating mock /api/v1/products/100 - PUT
+
+  [JMockver] ✅ Mock server running on http://localhost:3000
+  [JMockver] 👁️ See all routes in http://localhost:3000/jmockver/routes</code></pre>
+
+      <p id="web-ui">Also, you can see all routes into a Web UI in <code>/jmockver/routes</code>. This looks like this:
+      </p>
+
+      <img src="https://raw.githubusercontent.com/dadadev88/jmockver/master/docs/jmockver-routes-web-ui.png"
+        alt="JMockver Routes">
+
+      <p id="errors">If exists an error to serve a route, you will see a message like this:</p>
+
+      <pre><code>[JMockver]      ❌ JMockverResponseIdNotMatchedError: Response with code RESP00 not found on "/api/v1/products - POST" route
+[JMockver]      ❌ JMockverRouteAlreadyExistsError: Route "/api/v1/products - POST" already exists on "505213-jmockver-example.json" file
+[JMockver]      ❌ JMockverStatusCodeNotValidError: Status code 600 is not valid, in "/api/v1/products - POST" route</code></pre>
+    </main>
+  </div>
+  <script src="./index.js"></script>
+</body>
+
+</html>
