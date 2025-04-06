@@ -61,10 +61,10 @@ body {
 
 [theme=dark] {
   --color-text: var(--color-bg-100);
-  --color-title: var(--color-white);
+  --color-title: var(--color-primary-400);
   --color-border: var(--color-bg-200);
   --color-bg-1: var(--color-bg-700);
-  --color-bg-2: var(--color-bg-600);
+  --color-bg-2: var(--color-bg-800);
   --color-btn-primary: var(--color-primary-500);
 
   /* Switch */
@@ -91,9 +91,6 @@ body {
   }
 
   h3 {
-    color: var(--color-title);
-    margin-top: 0;
-    padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--color-border);
   }
 
@@ -115,6 +112,11 @@ body {
   a:hover {
     text-decoration: underline;
   }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-title);
+  margin: .5rem 0;
 }
 
 
