@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["mocks"],
+  "properties": {
+    "mocks": {
+      "description": "The mocks list to set the mock server",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The API endpoint URL to mocking"
+          },
+          "methods": {
+            "type": "object",
+            "description": "The HTTP methods to mock",
+            "properties": {
+              "GET": { "$ref": "#/definitions/methodConfig", "description": "The GET method config" },
+              "POST": { "$ref": "#/definitions/methodConfig", "description": "The POST method config" },
+              "PUT": { "$ref": "#/definitions/methodConfig", "description": "The PUT method config" },
+              "DELETE": { "$ref": "#/definitions/methodConfig", "description": "The DELETE method config" },
+              "PATCH": { "$ref": "#/definitions/methodConfig", "description": "The PATCH method config" }
+            },
+            "additionalProperties": false
+          },
+          "additionalProperties": false
+        }
+      },
+      "default": [
+        {
+          "url": "/api/v1/products",
+          "methods": {
+            "GET": { },
+            "POST": { }
+          }
+        }
+      ]
+    },
+    "$schema": {
+      "type": "string",
+      "description": "The schema version",
+      "default": "https://raw.githubusercontent.com/dadadev88/jmockver/master/jmockver-schema.json"
+    }
+  },
+  "definitions": {
+    "methodConfig": {
+      "type": "object",
+      "required": ["responseIdToReturn", "responses"],
+      "default": {
+        "responseIdToReturn": "RESP001",
+        "responses": [
+          { "id": "RESP001", "statusCode": 200, "sleep": 500, "body": { "message": "Hello, world!" } }
+        ]
+      },
+      "properties": {
+        "responseIdToReturn": {
+          "type": "string",
+          "description": "ID of the response to return, will be matched against the response id in the responses array"
+        },
+        "responses": {
+          "type": "array",
+          "description": "The responses list available for the method. Response is selected by the responseIdToReturn in the method config",
+          "items": {
+            "type": "object",
+            "required": ["id", "statusCode", "body"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier for the response, will be matched against the responseIdToReturn in the method config. Can be any string"
+              },
+              "statusCode": {
+                "type": "number",
+                "description": "HTTP status code to return. It is optional, by default is 200, but can be any number between 200 and 599",
+                "default": 200,
+                "minimum": 200,
+                "maximum": 599
+              },
+              "sleep": {
+                "type": "number",
+                "description": "Delay in milliseconds before sending response. It is optional, by default is 0ms",
+                "minimum": 0,
+                "default": 1000
+              },
+              "headers": {
+                "type": "object",
+                "description": "Custom HTTP headers. It is optional, by default is empty object",
+                "patternProperties": {
+                  "^.*$": { "type": "string" }
+                },
+                "default": { "X-My-Header": "My-Value" }
+              },
+              "body": {
+                "description": "Response body content",
+                "oneOf": [
+                  { "type": "object" },
+                  { "type": "array" },
+                  { "type": "string" },
+                  { "type": "number" },
+                  { "type": "boolean" },
+                  { "type": "null" }
+                ],
+                "default": { "message": "Hello, world!" }
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
