@@ -59,6 +59,12 @@
           "type": "string",
           "description": "ID of the response to return, will be matched against the response id in the responses array"
         },
+        "sleep": {
+          "type": "number",
+          "description": "Default delay in milliseconds before sending response. It is optional, by default is 0ms",
+          "minimum": 0,
+          "default": 0
+        },
         "responses": {
           "type": "array",
           "description": "The responses list available for the method. Response is selected by the responseIdToReturn in the method config",
@@ -81,7 +87,7 @@
                 "type": "number",
                 "description": "Delay in milliseconds before sending response. It is optional, by default is 0ms",
                 "minimum": 0,
-                "default": 1000
+                "default": 0
               },
               "headers": {
                 "type": "object",

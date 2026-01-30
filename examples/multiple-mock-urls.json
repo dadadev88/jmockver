@@ -6,6 +6,7 @@
       "methods": {
         "GET": {
           "responseIdToReturn": "RESP001",
+          "sleep": 1000,
           "responses": [
             {
               "id": "RESP001",
@@ -35,7 +36,7 @@
       }
     },
     {
-      "url": "/api/v1/products/100",
+      "url": "/api/v1/products/:productId",
       "methods": {
         "GET": {
           "responseIdToReturn": "RESP001",

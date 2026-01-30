@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { networkInterfaces } from 'node:os';
 import express, { type Express } from 'express';
 import CLIargs from 'minimist';
 import cors from 'cors';
@@ -20,7 +21,12 @@ class JMockver {
 
   private loadMiddleware(): void {
     this.app.use(cors());
-    this.app.use(morgan(this.cliArgs.loggerFormat ?? JMockverConstants.LOGGER_FORMAT_DEFAULT));
+    const customMorganFormat = '[JMockver] ➡️  :method :url :status - :response-time ms\n';
+    this.app.use(morgan(customMorganFormat));
+
+    const staticDir = join('./', this.cliArgs.staticDir ?? JMockverConstants.STATIC_DIR_DEFAULT);
+    this.app.use(JMockverConstants.STATIC_SERVE_DIR, express.static(staticDir));
+    LoggerUtil.info(`🗂️  Serving static files from "${staticDir}" dir`);
   }
 
   async run(): Promise<void> {
@@ -49,11 +55,26 @@ class JMockver {
     await routesUtils.generateRoutesFromJSONFiles(mocksFolder, files);
 
     const port = this.cliArgs.port ?? JMockverConstants.APP_PORT_DEFAULT;
-    this.app.listen(port, () => {
-      LoggerUtil.jumpLine();
-      LoggerUtil.info(`✅ Mock server running on http://localhost:${port}`);
-      LoggerUtil.info(`👁️ See all routes in http://localhost:${port}/jmockver/routes`);
+    const host = this.cliArgs.host ?? JMockverConstants.APP_HOST_DEFAULT;
+    this.app.listen(port, host, () => {
+      this.logAfterServerStart(host, port);
     });
+  }
+
+  private logAfterServerStart(host: string, port: number): void {
+    LoggerUtil.jumpLine();
+    const hostToDisplay = host === '0.0.0.0' ? 'localhost' : host;
+    LoggerUtil.info(`✅ Mock server running on http://${hostToDisplay}:${port}`);
+    if (host === '0.0.0.0') {
+      const localIp = Object.values(networkInterfaces())
+        .flat()
+        .filter((details) => details?.family === 'IPv4' && !details.internal)
+        .map((details) => details?.address)
+        .shift();
+      LoggerUtil.info(`🌐 Accessible in your network on http://${localIp}:${port}`);
+    }
+    LoggerUtil.info(`🗂️  Static server running on http://${hostToDisplay}:${port}${JMockverConstants.STATIC_SERVE_DIR}`);
+    LoggerUtil.info(`👁️  See all routes in http://${hostToDisplay}:${port}/jmockver/routes`);
   }
 }
 

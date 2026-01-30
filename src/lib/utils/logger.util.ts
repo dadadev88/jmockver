@@ -11,28 +11,34 @@ export class LoggerUtil {
 
   public static help() {
     console.log(`
-++++${this.prefix} 🚀 Run a mock server with JSON files, customize the response body and status code, all with JSON
+++++${this.prefix} 🚀 Run a mock server with JSON files, customize the response body and status code, also serve static files.
 
-++++⚙️ Options:
+++++⚙️  Options:
 
-++++  --port: Port to run the server on. Default: 3000
-++++  --dir: Directory to search for JSON mock files. Default: ./jmockver
-++++  --loggerFormat: Logger format. Default: tiny
-++++  --help: Show this help message
+++++  --port:         Port to run the server on. Default: 3000
+
+++++  --host:         Host to run the server on. Default: localhost
+++++                  If you want to allow access from other devices in your network, use 0.0.0.0
+
+++++  --dir:          Directory to search for JSON mock files. Default: ./jmockver
+
+++++  --staticDir:    Directory to search static files. Default: ./jmockver/static
+++++                  The static files will be served on /static path. Ex.: /static/styles.css o /static/images/logo.png
+
+++++  --help:         Show this help message
 
 ++++💡 Example:
 
 ++++  Run with default options:
 ++++    npx jmockver
 
-++++  Run on port 8080:
-++++    npx jmockver --port=8080
+++++  Run on port 8080 and host 0.0.0.0 (accessible in your network):
+++++    npx jmockver --port=8080 --host=0.0.0.0
 
-++++  Run with custom mocks directory:
-++++    npx jmockver --dir=./my-mocks
+++++  Run with custom directories for mock files and static files:
+++++    npx jmockver --dir=./mocks/api --staticDir=./mocks/static
 
-++++  Run with logger custom format (Based on morgan package. Some formats: dev, short, tiny, common, combined):
-++++    npx jmockver --loggerFormat="dev"
+++++  You can combine all options (except --help):
 ++++`.replaceAll('++++', ''));
   }
 
@@ -42,7 +48,7 @@ export class LoggerUtil {
 
 ++++⚙️ Options:
 
-++++  --dir: Directory to create the file. Default: ./mocks
+++++  --dir: Directory to create the file. Default: ./jmockver
 ++++  --help: Show this help message
 
 ++++💡 Example:
@@ -51,7 +57,7 @@ export class LoggerUtil {
 ++++    npx jmockver-generator
 
 ++++  Create a file in custom directory:
-++++    npx jmockver-generator --dir=./my-mocks
+++++    npx jmockver-generator --dir=./mocks
 ++++`.replaceAll('++++', ''));
   }
 }
