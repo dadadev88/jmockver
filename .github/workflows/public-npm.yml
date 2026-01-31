@@ -48,7 +48,7 @@ jobs:
 
           echo "[JMockver Action - RC] Packaging RC version and publish"
           npm run package
-          npm publish --tag rc
+          npm publish --access public --tag rc
 
       - name: Publish stable version package (master)
         if: github.event.pull_request.base.ref == 'master'
@@ -65,5 +65,5 @@ jobs:
 
           echo "$LOG_PREFIX Packaging stable version $STABLE_VERSION and publish"
           npm run package
-          npm publish
+          npm publish --access public
 
