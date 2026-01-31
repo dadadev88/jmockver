@@ -7,7 +7,7 @@ module.exports = {
       rules: {
         'issue-format': (parsed) => {
           const { header } = parsed;
-          const pattern = new RegExp(`^(feat|fix|docs|style|refactor|perf|test|chore)(\\([\\w\\s]+\\))?: ${JIRA_ISSUE_PREFIX}-\\d+ .{5,72}$`);
+          const pattern = new RegExp(`^(feat|fix|docs|style|refactor|perf|test|chore|ci)(\\([\\w\\s]+\\))?: ${JIRA_ISSUE_PREFIX}-\\d+ .{5,72}$`);
 
           if (!pattern.test(header)) {
             return [
@@ -45,7 +45,7 @@ module.exports = {
     'type-enum': [
       2,
       'always',
-      ['feat', 'fix', 'docs', 'style', 'refactor', 'perf', 'test', 'chore']
+      ['feat', 'fix', 'docs', 'style', 'refactor', 'perf', 'test', 'chore', 'ci']
     ],
     'subject-case': [0],
     'issue-format': [2, 'always']

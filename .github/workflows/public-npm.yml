@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   build-publish:
@@ -39,8 +40,6 @@ jobs:
 
       - name: Publish RC version package (develop)
         if: github.event.pull_request.base.ref == 'develop'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           RC_VERSION=$(node -p "require('./package.json').version")
           echo "Creating tag v$RC_VERSION and push to origin"
@@ -53,8 +52,6 @@ jobs:
 
       - name: Publish stable version package (master)
         if: github.event.pull_request.base.ref == 'master'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           LOG_PREFIX="[JMockver Action - Stable]"
 
