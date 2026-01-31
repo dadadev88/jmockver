@@ -6,11 +6,11 @@
       "methods": {
         "GET": {
           "responseIdToReturn": "RESP001",
+          "sleep": 200,
           "responses": [
             {
               "id": "RESP001",
               "statusCode": 200,
-              "sleep": 200,
               "headers": {
                 "X-Header-Example": "Example value"
               },

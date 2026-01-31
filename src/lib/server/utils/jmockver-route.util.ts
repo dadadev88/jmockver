@@ -24,7 +24,7 @@ export class JMockverRoutesUtils {
           throw new JMockverParseError(`Mock file ${filename} is not valid`);
         }
 
-        LoggerUtil.info(`🗂️  Routes in ${filename} file`);
+        LoggerUtil.info(`➡️  Routes in ${filename} file`);
         this.mapRoutesFromArrayConfig(jmockverFile, filename);
       } catch (error) {
         LoggerUtil.info(`❌ Error parsing ${filename} file`);
@@ -64,14 +64,19 @@ export class JMockverRoutesUtils {
 
         this.mockedRoutes.set(routeKey, filename);
 
-        this.createRoute(method, routeFullPath, (_, res) => {
+        this.createRoute(method, routeFullPath, (req, res) => {
+          const hasPathParams = req.params && Object.keys(req.params).length > 0;
+          if (hasPathParams) LoggerUtil.info(`⤵️  Route called with path params: ${JSON.stringify(req.params)}`);
+
           if (responseConfig?.headers) {
             for (const [key, value] of Object.entries(responseConfig.headers)) {
               res.setHeader(key, value as any);
             }
           }
 
-          const sleepTime = methodConfig.sleep ?? JMockverConstants.SLEEP_TIME_DEFAULT;
+          const sleepTime = responseConfig?.sleep
+            ?? methodConfig.sleep
+            ?? JMockverConstants.SLEEP_TIME_DEFAULT;
           setTimeout(() => {
             res.status(responseConfig?.statusCode ?? JMockverConstants.RESPONSE_HTTP_DEFAULT)
               .json(responseConfig?.body ?? {});
