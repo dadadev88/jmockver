@@ -16,12 +16,14 @@ NEW_VERSION=$(node -p "require('./package.json').version")
 
 echo "$PREFIX New RC version created $NEW_VERSION"
 
-read -p "$PREFIX Do you want to commit (chore) and push the new RC version? (y/n): " confirm
+read -p "$PREFIX Do you want to commit (chore) and push the new RC version? (y/N): " confirm
+# If confirm is empty, default to 'n'
+confirm=${confirm:-n}
 if [[ $confirm == [yY] ]]; then
   CURRENT_BRANCH=$(git branch --show-current)
   echo "$PREFIX Commit and push the new RC version"
   git add package.json package-lock.json
-  git commit -m "chore: Update RC version from $CURRENT_VERSION to $NEW_VERSION (VERSION-RC)"
+  git commit -m "chore: DADA-0000 Update RC version from $CURRENT_VERSION to $NEW_VERSION (VERSION-RC)"
   git push origin $CURRENT_BRANCH
 
   echo "$PREFIX ✅ PR to develop branch URL:"

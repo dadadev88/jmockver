@@ -13,14 +13,17 @@ module.exports = {
             return [
               false,
           `Commit message must follow the format:
-------------  Format: <type>[optional scope]: ${JIRA_ISSUE_PREFIX}-<number> <description (max 72 chars)>
 
-------------  Valid commit examples:
+------------  Jira issue prefix: ${JIRA_ISSUE_PREFIX} (if is different, update the commitlint.config.js file)
+
+------------  Format required: <type>[optional scope]: ${JIRA_ISSUE_PREFIX}-<number> <description (5-72 chars)>
+
+------------  ✅ Valid commit examples:
 ------------  ✓ feat: ${JIRA_ISSUE_PREFIX}-4123 add user authentication
 ------------  ✓ fix(api): ${JIRA_ISSUE_PREFIX}-123 resolve login bug
 ------------  ✓ docs(api): ${JIRA_ISSUE_PREFIX}-4567 update API documentation
 
-------------  Invalid commit examples:
+------------  ❌ Invalid commit examples:
 ------------  ✗ Invalid prefix
 ------------    feat: JIRA-23 pruebas
 ------------  ✗ Missing ${JIRA_ISSUE_PREFIX}-<number>
