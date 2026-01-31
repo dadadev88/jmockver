@@ -6,16 +6,14 @@ on:
     types: [closed]
     branches: [develop, master]
 
-permissions:
-  contents: write
-  id-token: write
-
 jobs:
   build-publish:
     name: Build and publish NPM package
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     if: github.event.pull_request.merged == true
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -27,7 +25,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm ci
@@ -48,7 +45,7 @@ jobs:
 
           echo "[JMockver Action - RC] Packaging RC version and publish"
           npm run package
-          npm publish --access public --tag rc
+          npm publish --access public --provenance --tag rc
 
       - name: Publish stable version package (master)
         if: github.event.pull_request.base.ref == 'master'
@@ -65,5 +62,5 @@ jobs:
 
           echo "$LOG_PREFIX Packaging stable version $STABLE_VERSION and publish"
           npm run package
-          npm publish --access public
+          npm publish --access public --provenance
 
